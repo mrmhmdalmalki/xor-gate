@@ -1,0 +1,50 @@
+% ============================================================
+%  XOR gate - gate-level realization
+%      Y = (A OR B) AND (A NAND B)
+%  Output is 1 only when exactly one input is 1.
+%  Each block (OR, NAND, AND) is a transistor circuit from the
+%  matching folder of this project.
+%  Compile:  pdflatex circuit.tex
+% ============================================================
+\documentclass[border=12pt]{standalone}
+\usepackage{circuitikz}
+\usepackage{amsmath}
+\ctikzset{logic ports=american}
+
+\begin{document}
+\begin{circuitikz}[line width=0.8pt, scale=1.15, transform shape]
+
+  % ---------- gates ----------
+  \node[or port]   (g1) at (4,3.6) {};
+  \node[nand port] (g2) at (4,0.8) {};
+  \node[and port]  (g3) at (8.5,2.2) {};
+  \node[below=2pt] at (g1.south) {OR};
+  \node[below=2pt] at (g2.south) {NAND};
+  \node[below=2pt] at (g3.south) {AND};
+
+  % ---------- input buses ----------
+  \def\ax{1.4}\def\bx{2.1}
+  % A bus (outer)
+  \draw (\ax,0 |- g1.in 1) -- (\ax,0 |- g2.in 1);
+  \draw (g1.in 1) -- (\ax,0 |- g1.in 1);
+  \draw (g2.in 1) -- (\ax,0 |- g2.in 1);
+  \draw (-0.6,0 |- g1.in 1) node[ocirc]{} node[left]{$A$} -- (\ax,0 |- g1.in 1);
+  \fill (\ax,0 |- g1.in 1) circle (2pt);
+  % B bus (inner)
+  \draw (\bx,0 |- g1.in 2) -- (\bx,0 |- g2.in 2);
+  \draw (g1.in 2) -- (\bx,0 |- g1.in 2);
+  \draw (g2.in 2) -- (\bx,0 |- g2.in 2);
+  \draw (-0.6,0 |- g2.in 2) node[ocirc]{} node[left]{$B$} -- (\bx,0 |- g2.in 2);
+  \fill (\bx,0 |- g2.in 2) circle (2pt);
+
+  % ---------- inter-gate wiring to the AND ----------
+  \draw (g1.out) -- ++(0.8,0) |- (g3.in 1);  % (A+B)
+  \draw (g2.out) -- ++(1.2,0) |- (g3.in 2);  % (A.B)'
+  \node[anchor=south] at ($(g1.out)+(0.5,0.05)$) {\small $A+B$};
+  \node[anchor=north] at ($(g2.out)+(0.7,-0.05)$) {\small $\overline{A\cdot B}$};
+
+  % ---------- output ----------
+  \draw (g3.out) -- ++(1.2,0) node[ocirc]{} node[right]{$Y=A\oplus B$};
+
+\end{circuitikz}
+\end{document}
