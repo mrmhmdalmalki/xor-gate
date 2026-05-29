@@ -50,9 +50,9 @@ Check it against the truth table:
 
 Each block is a transistor circuit already documented in this project:
 
-- **OR** → see [`../or`](../or)
-- **NAND** → see [`../nand`](../nand)
-- **AND** → see [`../and`](../and)
+- **OR** → see [`or-gate`](https://github.com/mrmhmdalmalki/or-gate)
+- **NAND** → see [`nand-gate`](https://github.com/mrmhmdalmalki/nand-gate)
+- **AND** → see [`and-gate`](https://github.com/mrmhmdalmalki/and-gate)
 
 Wire the two inputs `A` and `B` to **both** the OR and the NAND block, then feed those two
 outputs into the AND block. The AND block's output is `Y`. All blocks share the same `+5 V`
@@ -67,9 +67,9 @@ documented (and built from transistors) in this project:
 
 | Block | Folder | Transistors |
 |:------|:-------|:-----------:|
-| OR   | [`../or`](../or)     | 3 × 2N3904 |
-| NAND | [`../nand`](../nand) | 2 × 2N3904 |
-| AND  | [`../and`](../and)   | 3 × 2N3904 |
+| OR   | [`or-gate`](https://github.com/mrmhmdalmalki/or-gate)     | 3 × 2N3904 |
+| NAND | [`nand-gate`](https://github.com/mrmhmdalmalki/nand-gate) | 2 × 2N3904 |
+| AND  | [`and-gate`](https://github.com/mrmhmdalmalki/and-gate)   | 3 × 2N3904 |
 
 **Total: 8 × 2N3904**, plus their base/collector resistors. Every transistor is the same part:
 
