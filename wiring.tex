@@ -12,8 +12,17 @@
 \usepackage{tikz}
 \usetikzlibrary{calc}
 
+% ground symbol (pic): same stroke as everything, just extra gap between bars
+\tikzset{gnd/.pic={
+  \draw
+    (0,0) -- (0,-0.18)
+    (-0.34,-0.18) -- (0.34,-0.18)
+    (-0.21,-0.37) -- (0.21,-0.37)
+    (-0.08,-0.56) -- (0.08,-0.56);
+}}
 \begin{document}
-\begin{tikzpicture}[line width=1pt, font=\sffamily]
+\begin{tikzpicture}[line width=0.8pt, font=\sffamily]
+  \ctikzset{tripoles/thickness=1, bipoles/thickness=1, logic ports/thickness=1}
 
   % ---------- the three sub-gate boards ----------
   \draw[thick, fill=blue!6] (3.0,4.3) rectangle (5.2,6.3);
