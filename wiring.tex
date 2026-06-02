@@ -1,0 +1,52 @@
+% ============================================================
+%  XOR gate - block-level wiring diagram.
+%  XOR has no transistors of its own: it is built by wiring three
+%  finished sub-gate BOARDS together as
+%        Y = (A OR B) AND (A NAND B).
+%  A and B each fan out to the OR board and the NAND board; their
+%  outputs feed the AND board, whose output is Y.
+%  Compile:  pdflatex wiring.tex
+% ============================================================
+\documentclass[border=12pt]{standalone}
+\usepackage{circuitikz}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{tikzpicture}[line width=1pt, font=\sffamily]
+
+  % ---------- the three sub-gate boards ----------
+  \draw[thick, fill=blue!6] (3.0,4.3) rectangle (5.2,6.3);
+  \node[align=center, font=\bfseries] at (4.1,5.3) {OR\\[2pt]\footnotesize gate board};
+
+  \draw[thick, fill=blue!6] (3.0,0.7) rectangle (5.2,2.7);
+  \node[align=center, font=\bfseries] at (4.1,1.7) {NAND\\[2pt]\footnotesize gate board};
+
+  \draw[thick, fill=orange!10] (8.0,2.7) rectangle (10.2,5.3);
+  \node[align=center, font=\bfseries] at (9.1,4.0) {AND\\[2pt]\footnotesize gate board};
+
+  % ---------- input buses A and B ----------
+  \draw (1.0,-0.7) node[ocirc]{} node[left]{Input $A$} -- (1.0,5.8);
+  \draw (2.0,-0.7) node[ocirc]{} node[right]{Input $B$} -- (2.0,4.8);
+
+  % A -> OR.A and NAND.A
+  \draw (1.0,5.8) -- (3.0,5.8) node[anchor=south east,font=\footnotesize,pos=0.85]{A};
+  \fill (1.0,2.2) circle (1.6pt);
+  \draw (1.0,2.2) -- (3.0,2.2) node[anchor=south east,font=\footnotesize,pos=0.92]{A};
+  % B -> OR.B and NAND.B
+  \draw (2.0,4.8) -- (3.0,4.8) node[anchor=south east,font=\footnotesize,pos=0.85]{B};
+  \fill (2.0,1.2) circle (1.6pt);
+  \draw (2.0,1.2) -- (3.0,1.2) node[anchor=south east,font=\footnotesize,pos=0.85]{B};
+
+  % ---------- OR output -> AND top input ----------
+  \draw (5.2,5.3) -- (6.6,5.3) -- (6.6,4.6) -- (8.0,4.6);
+  \node[anchor=south,font=\footnotesize] at (5.9,5.3) {$A+B$};
+  % ---------- NAND output -> AND bottom input ----------
+  \draw (5.2,1.7) -- (7.0,1.7) -- (7.0,3.4) -- (8.0,3.4);
+  \node[anchor=south,font=\footnotesize] at (6.0,1.7) {$\overline{A\cdot B}$};
+
+  % ---------- AND output -> Y ----------
+  \draw (10.2,4.0) -- (11.7,4.0) node[ocirc]{} node[right]{Output $Y=A\oplus B$};
+
+\end{tikzpicture}
+\end{document}
