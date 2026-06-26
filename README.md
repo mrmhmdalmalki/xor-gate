@@ -79,27 +79,27 @@ documented (and built from transistors) in this project:
 
 | Block | Folder | Transistors |
 |:------|:-------|:-----------:|
-| OR   | [`or-gate`](https://github.com/mrmhmdalmalki/or-gate)     | 3 × 2N3904 |
-| NAND | [`nand-gate`](https://github.com/mrmhmdalmalki/nand-gate) | 2 × 2N3904 |
-| AND  | [`and-gate`](https://github.com/mrmhmdalmalki/and-gate)   | 3 × 2N3904 |
+| OR   | [`or-gate`](https://github.com/mrmhmdalmalki/or-gate)     | 3 × 2N3904 + 3 × 2N3906 |
+| NAND | [`nand-gate`](https://github.com/mrmhmdalmalki/nand-gate) | 2 × 2N3904 + 2 × 2N3906 |
+| AND  | [`and-gate`](https://github.com/mrmhmdalmalki/and-gate)   | 3 × 2N3904 + 3 × 2N3906 |
 
-**Total: 8 × 2N3904**, plus their base/collector resistors. Every transistor is the same part:
+**Total: 8 × 2N3904 + 8 × 2N3906**, plus their base and LED resistors. Every block uses the same
+complementary pair:
 
-### Transistor: 2N3904
+### Transistors: 2N3904 (NPN) + 2N3906 (PNP)
 
-- **Type:** **NPN** *bipolar junction transistor* (BJT), a current-controlled switch used
-  fully on/off.
-- **Package:** TO-92 (3 legs). **Pinout** (flat face toward you, legs down): **E, B, C**
-  (Emitter, Base, Collector), left to right.
+- **Type:** a matched **complementary pair** — the 2N3904 is NPN, the 2N3906 is PNP. Each block
+  uses them in a CMOS-style push-pull arrangement, so its output is driven cleanly to
+  `~4.8 V` / `~0.2 V`.
+- **Package:** TO-92 (3 legs) for both. **Pinout** (flat face toward you, legs down): **E, B, C**
+  (Emitter, Base, Collector), left to right — the same for both parts.
 - **Key ratings:** V_CE ≈ **40 V** max, I_C ≈ **200 mA** max, current gain *hFE* ≈ **100–300**.
-- **Why NPN?** Every stage has its emitter at **ground**, so a HIGH (+5 V) on a base turns the
-  transistor on and pulls its output toward ground. **Substitutes:** 2N2222, BC547 (re-check
-  the pinout).
+- **Substitutes:** BC547 (NPN) + BC557 (PNP), or 2N2222 + 2N2907 (re-check the pinout).
 
 ### Resistors
 
-- **10 kΩ** base resistors and **1 kΩ** collector pull-ups inside each block; see the
-  individual sub-gate folders for the exact placement.
+- **10 kΩ** base resistors and **220 Ω** LED resistors inside each block; see the individual
+  sub-gate folders for the exact placement.
 
 ### Power
 
