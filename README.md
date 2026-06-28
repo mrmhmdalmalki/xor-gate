@@ -135,8 +135,10 @@ complementary pair:
 ```bash
 pdflatex circuit.tex
 pdflatex symbol.tex
+pdflatex wiring.tex
 pdftoppm -png -r 600 circuit.pdf images/circuit   # -> images/circuit-1.png
 pdftoppm -png -r 600 symbol.pdf  images/symbol     # -> images/symbol-1.png
+pdftoppm -png -r 400 wiring.pdf  images/wiring     # -> images/wiring-1.png
 ```
 
 > Use `pdftoppm`, not `pdftocairo`, at high DPI the Cairo backend can garble the fonts.
