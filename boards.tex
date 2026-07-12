@@ -1,11 +1,11 @@
 % ============================================================
-%  XOR gate - block-level wiring diagram.
-%  XOR has no transistors of its own: it is built by wiring three
-%  finished sub-gate BOARDS together as
+%  XOR gate - block-level wiring diagram (ALTERNATIVE build from
+%  three finished sub-gate boards; the compact 12-transistor
+%  build is in wiring.tex):
 %        Y = (A OR B) AND (A NAND B).
 %  A and B each fan out to the OR board and the NAND board; their
 %  outputs feed the AND board, whose output is Y.
-%  Compile:  pdflatex wiring.tex
+%  Compile:  pdflatex boards.tex
 % ============================================================
 \documentclass[border=12pt]{standalone}
 \usepackage{circuitikz}

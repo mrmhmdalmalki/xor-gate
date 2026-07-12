@@ -1,10 +1,12 @@
 % ============================================================
-%  XOR gate - gate-level realization
+%  XOR gate - gate-level realization (the same function built
+%  from standard gates; the native transistor-level schematic is
+%  in circuit.tex):
 %      Y = (A OR B) AND (A NAND B)
 %  Output is 1 only when exactly one input is 1.
 %  Each block (OR, NAND, AND) is a transistor circuit from the
 %  matching folder of this project.
-%  Compile:  pdflatex circuit.tex
+%  Compile:  pdflatex circuit-gates.tex
 % ============================================================
 \documentclass[border=12pt]{standalone}
 \usepackage{circuitikz}

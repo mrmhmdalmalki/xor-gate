@@ -1,0 +1,169 @@
+% ============================================================
+%  XOR gate - transistor-level schematic (COMPLEMENTARY / CMOS-style).
+%  The standard CMOS XOR topology built from 2N3904/2N3906 pairs:
+%    Pull-up  (2N3906): (Q5 par Q6) in SERIES with (Q7 par Q8)
+%                        -> conducts when (A+B).(A.B)' = A XOR B
+%    Pull-down (2N3904): (Q1 ser Q2) in PARALLEL with (Q3 ser Q4)
+%                        -> conducts when A.B + A'.B'  (A = B)
+%    Inverters: Q10/Q9 -> A-bar,  Q12/Q11 -> B-bar (drawn at left)
+%  Every base through its OWN 10k resistor (R1..R12 match Q1..Q12).
+%  Output is actively driven rail-to-rail:  Y = A XOR B.
+%  Compile:  pdflatex circuit.tex
+% ============================================================
+\documentclass[border=18pt]{standalone}
+\usepackage{circuitikz}
+\usepackage{amsmath}
+\usetikzlibrary{calc}
+
+\newcommand{\pinlabelsN}[1]{%
+  \node[red,font=\bfseries\footnotesize,anchor=west] at ($(#1.C)+(0.22,0.16)$){C};
+  \node[red,font=\bfseries\footnotesize,anchor=south east] at ($(#1.B)+(-0.08,0.14)$){B};
+  \node[red,font=\bfseries\footnotesize,anchor=west] at ($(#1.E)+(0.22,-0.16)$){E};
+}
+\newcommand{\pinlabelsP}[1]{%
+  \node[red,font=\bfseries\footnotesize,anchor=west] at ($(#1.E)+(0.22,0.16)$){E};
+  \node[red,font=\bfseries\footnotesize,anchor=north east] at ($(#1.B)+(-0.08,-0.14)$){B};
+  \node[red,font=\bfseries\footnotesize,anchor=west] at ($(#1.C)+(0.22,-0.16)$){C};
+}
+\tikzset{gnd/.pic={
+  \draw (0,0) -- (0,-0.18) (-0.34,-0.18) -- (0.34,-0.18)
+        (-0.21,-0.37) -- (0.21,-0.37) (-0.08,-0.56) -- (0.08,-0.56);
+}}
+
+\begin{document}
+\begin{circuitikz}[american, line width=1.1pt]
+  \ctikzset{tripoles/thickness=1, bipoles/thickness=1}
+
+  % ---------- supply rail (+5 V) ----------
+  \draw (-11.5,15) -- (24.5,15);
+  \node[anchor=south] at (5,15.05) {\textbf{$V_{CC}=+5\,\mathrm{V}$}};
+
+  % =====================================================================
+  %  INPUT INVERTERS (left):  Q10/Q9 make A-bar,  Q12/Q11 make B-bar
+  % =====================================================================
+  % ---- inverter A ----
+  \node[pnp] (q10) at (-5.5,12.6) {};
+  \node[npn] (q9)  at (-5.5,9.8) {};
+  \pinlabelsP{q10}\pinlabelsN{q9}
+  \node[font=\footnotesize,align=left,anchor=west] at (-4.6,12.6) {Q10\\2N3906};
+  \node[font=\footnotesize,align=left,anchor=west] at (-4.6,9.8) {Q9\\2N3904};
+  \draw (q10.E) -- (-5.5,15);  \fill (-5.5,15) circle (1.6pt);
+  \draw (q9.E) -- (-5.5,8.9) pic{gnd};
+  \draw (q10.C) -- (-5.5,11.2) coordinate (nab);
+  \draw (q9.C) -- (nab);
+  \fill (nab) circle (1.6pt);
+  \draw (nab) -- (-2.3,11.2) node[ocirc]{} node[right]{$\overline{A}$};
+  % input A: terminal, LED, base feeds
+  \draw (-11.2,11.2) node[ocirc]{} node[left]{Input $A$} -- (-9.2,11.2) coordinate (ain);
+  \fill (ain) circle (1.6pt);
+  \draw (ain) -- (-9.2,12.6) to[R, l=$R_{10}$] (q10.B);
+  \draw (ain) -- (-9.2,9.8) to[R, l_=$R_{9}$] (q9.B);
+  \fill (-10.4,11.2) circle (1.6pt);
+  \draw (-10.4,11.2) to[R, l_={$R_{inA}$}] (-10.4,9.6)
+        to[leD, l_={LED$_A$}] (-10.4,8.4) -- (-10.4,8.35) pic{gnd};
+
+  % ---- inverter B ----
+  \node[pnp] (q12) at (-5.5,6.6) {};
+  \node[npn] (q11) at (-5.5,3.8) {};
+  \pinlabelsP{q12}\pinlabelsN{q11}
+  \node[font=\footnotesize,align=left,anchor=west] at (-4.6,6.6) {Q12\\2N3906};
+  \node[font=\footnotesize,align=left,anchor=west] at (-4.6,3.8) {Q11\\2N3904};
+  % +5 V tap jogs right then up (one clean crossing over the A-bar tap)
+  \draw (q12.E) -- (-5.5,7.7) -- (-2.8,7.7) -- (-2.8,15);
+  \fill (-2.8,15) circle (1.6pt);
+  \draw (q11.E) -- (-5.5,2.9) pic{gnd};
+  \draw (q12.C) -- (-5.5,5.2) coordinate (nbb);
+  \draw (q11.C) -- (nbb);
+  \fill (nbb) circle (1.6pt);
+  \draw (nbb) -- (-2.3,5.2) node[ocirc]{} node[right]{$\overline{B}$};
+  % input B: terminal, LED, base feeds
+  \draw (-11.2,5.2) node[ocirc]{} node[left]{Input $B$} -- (-9.2,5.2) coordinate (bin);
+  \fill (bin) circle (1.6pt);
+  \draw (bin) -- (-9.2,6.6) to[R, l=$R_{12}$] (q12.B);
+  \draw (bin) -- (-9.2,3.8) to[R, l_=$R_{11}$] (q11.B);
+  \fill (-10.4,5.2) circle (1.6pt);
+  \draw (-10.4,5.2) to[R, l_={$R_{inB}$}] (-10.4,3.6)
+        to[leD, l_={LED$_B$}] (-10.4,2.4) -- (-10.4,2.35) pic{gnd};
+
+  \node[font=\footnotesize\itshape, align=center] at (-7.2,0.9)
+       {the two inverters make $\overline{A}$ and $\overline{B}$\\for the gate on the right};
+
+  % =====================================================================
+  %  PULL-UP NETWORK:  (Q5 par Q6)  in series with  (Q7 par Q8)
+  % =====================================================================
+  \node[pnp] (q5) at (10.5,12.6) {};
+  \node[pnp] (q6) at (18.0,12.6) {};
+  \pinlabelsP{q5}\pinlabelsP{q6}
+  \node[font=\footnotesize,align=left,anchor=west] at (11.4,12.6) {Q5\\2N3906};
+  \node[font=\footnotesize,align=left,anchor=west] at (18.9,12.6) {Q6\\2N3906};
+  \draw (q5.E) -- (10.5,15);  \fill (10.5,15) circle (1.6pt);
+  \draw (q6.E) -- (18.0,15);  \fill (18.0,15) circle (1.6pt);
+  % node u bus
+  \draw (q5.C) -- (10.5,10.7);
+  \draw (q6.C) -- (18.0,10.7);
+  \draw (10.5,10.7) -- (18.0,10.7);
+  \node[anchor=south,font=\footnotesize] at (14.25,10.75) {$u$};
+
+  \node[pnp] (q7) at (10.5,8.9) {};
+  \node[pnp] (q8) at (18.0,8.9) {};
+  \pinlabelsP{q7}\pinlabelsP{q8}
+  \node[font=\footnotesize,align=left,anchor=west] at (11.4,8.9) {Q7\\2N3906};
+  \node[font=\footnotesize,align=left,anchor=west] at (18.9,8.9) {Q8\\2N3906};
+  \draw (q7.E) -- (10.5,10.7);  \fill (10.5,10.7) circle (1.6pt);
+  \draw (q8.E) -- (18.0,10.7);  \fill (18.0,10.7) circle (1.6pt);
+
+  % ---------- output bus Y ----------
+  \draw (q7.C) -- (10.5,6.9);
+  \draw (q8.C) -- (18.0,6.9);
+  \draw (10.5,6.9) -- (23.6,6.9) node[ocirc]{} node[right]{Output $Y=A\oplus B$};
+  \fill (10.5,6.9) circle (1.6pt);
+  \fill (18.0,6.9) circle (1.6pt);
+
+  % =====================================================================
+  %  PULL-DOWN NETWORK:  (Q1 ser Q2)  in parallel with  (Q3 ser Q4)
+  % =====================================================================
+  \node[npn] (q1) at (10.5,5.1) {};
+  \node[npn] (q2) at (10.5,2.4) {};
+  \pinlabelsN{q1}\pinlabelsN{q2}
+  \node[font=\footnotesize,align=left,anchor=west] at (11.4,5.1) {Q1\\2N3904};
+  \node[font=\footnotesize,align=left,anchor=west] at (11.4,2.4) {Q2\\2N3904};
+  \draw (q1.C) -- (10.5,6.9);
+  \draw (q1.E) -- (q2.C);
+  \draw (q2.E) -- (10.5,1.5) pic{gnd};
+
+  \node[npn] (q3) at (18.0,5.1) {};
+  \node[npn] (q4) at (18.0,2.4) {};
+  \pinlabelsN{q3}\pinlabelsN{q4}
+  \node[font=\footnotesize,align=left,anchor=west] at (18.9,5.1) {Q3\\2N3904};
+  \node[font=\footnotesize,align=left,anchor=west] at (18.9,2.4) {Q4\\2N3904};
+  \draw (q3.C) -- (18.0,6.9);
+  \draw (q3.E) -- (q4.C);
+  \draw (q4.E) -- (18.0,1.5) pic{gnd};
+
+  % =====================================================================
+  %  base terminals (fed from A, B and the inverter outputs)
+  % =====================================================================
+  \draw (q5.B) to[R, l_=$R_{5}$] (6.6,12.6)  node[ocirc]{} node[left]{$A$};
+  \draw (q6.B) to[R, l_=$R_{6}$] (14.6,12.6) node[ocirc]{} node[left]{$B$};
+  \draw (q7.B) to[R, l_=$R_{7}$] (6.6,8.9)   node[ocirc]{} node[left]{$\overline{A}$};
+  \draw (q8.B) to[R, l_=$R_{8}$] (14.6,8.9)  node[ocirc]{} node[left]{$\overline{B}$};
+  \draw (q1.B) to[R, l_=$R_{1}$] (6.6,5.1)   node[ocirc]{} node[left]{$A$};
+  \draw (q3.B) to[R, l_=$R_{3}$] (14.6,5.1)  node[ocirc]{} node[left]{$\overline{A}$};
+  \draw (q2.B) to[R, l_=$R_{2}$] (6.6,2.4)   node[ocirc]{} node[left]{$B$};
+  \draw (q4.B) to[R, l_=$R_{4}$] (14.6,2.4)  node[ocirc]{} node[left]{$\overline{B}$};
+
+  % ---------- output LED ----------
+  \fill (21.2,6.9) circle (1.6pt);
+  \draw (21.2,6.9) to[R, l={$R_{out}$}] (21.2,5.1)
+        to[leD, l={LED$_{\mathrm{out}}$}] (21.2,3.9) -- (21.2,3.85) pic{gnd};
+
+  % ---------- section notes ----------
+  \node[font=\footnotesize\itshape,anchor=west] at (20.6,11.9)
+       {pull-up: on when $A\neq B$};
+  \node[font=\footnotesize\itshape,anchor=west] at (20.6,2.2)
+       {pull-down: on when $A=B$};
+  \node[font=\footnotesize\itshape,anchor=west, text width=9.6cm] at (6.0,0.3)
+       {all base resistors $R_1$--$R_{12}$ are $10\,\mathrm{k}\Omega$; LED resistors are $220\,\Omega$};
+
+\end{circuitikz}
+\end{document}
