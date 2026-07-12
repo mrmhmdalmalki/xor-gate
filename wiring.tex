@@ -51,41 +51,30 @@
 \begin{tikzpicture}[line width=1.1pt, font=\sffamily]
   \ctikzset{bipoles/thickness=1, bipoles/length=0.85cm, resistors/scale=0.85}
 
-  % ---------- the two board bodies (abutted; seam between cols 30 / 31) ----------
-  \fill[board,rounded corners=7pt] (0.1,-0.5)  rectangle (21.2,11.5);
-  \fill[board,rounded corners=7pt] (21.5,-0.5) rectangle (42.6,11.5);
-  \node[font=\footnotesize\bfseries,anchor=south] at (10.6,11.55) {board 1};
-  \node[font=\footnotesize\bfseries,anchor=south] at (32.0,11.55) {board 2};
+  % ---------- board body (one full-size 830-point breadboard) ----------
+  \fill[board,rounded corners=7pt] (0.1,-0.5) rectangle (44.7,11.5);
 
-  % ---------- hole grid (two banks of 5 rows, both boards) ----------
-  \foreach \c in {1,...,60}{
+  % ---------- hole grid (two banks of 5 rows) ----------
+  \foreach \c in {1,...,63}{
     \foreach \y in {9.0,8.4,7.8,7.2,6.6, 5.4,4.8,4.2,3.6,3.0}{
       \fill[black!16] ({0.7*\c},\y) circle (0.45mm);
     }
   }
-  % centre gaps (ravines)
-  \fill[black!5] (0.3,5.85)  rectangle (21.0,6.15);
-  \fill[black!5] (21.7,5.85) rectangle (42.4,6.15);
+  % centre gap (ravine)
+  \fill[black!5] (0.3,5.85) rectangle (44.5,6.15);
 
   % ---------- power rails: top pair (+5 V outer, GND inner), bottom GND ----------
-  \foreach \c in {1,...,60}{
+  \foreach \c in {1,...,63}{
     \fill[red!28]  ({0.7*\c},11.15) circle (0.45mm);
     \fill[blue!28] ({0.7*\c},10.6)  circle (0.45mm);
     \fill[blue!28] ({0.7*\c},0.0)   circle (0.45mm);
   }
-  \draw[vcc]    (0.3,11.15)  -- (21.1,11.15);
-  \draw[vcc]    (21.6,11.15) -- (42.4,11.15);
-  \draw[gnd!80] (0.3,10.6)   -- (21.1,10.6);
-  \draw[gnd!80] (21.6,10.6)  -- (42.4,10.6);
-  \draw[gnd!80] (0.3,0.0)    -- (21.1,0.0);
-  \draw[gnd!80] (21.6,0.0)   -- (42.4,0.0);
-  % rail bridges across the seam
-  \draw[vcc]    (21.1,11.15) to[bend left=45] (21.6,11.15);
-  \draw[gnd!80] (21.1,10.6)  to[bend left=45] (21.6,10.6);
-  \draw[gnd!80] (21.1,0.0)   to[bend right=45] (21.6,0.0);
-  \node[vcc,font=\footnotesize\bfseries,anchor=west] at (42.7,11.15) {$+5\,$V rail};
-  \node[gnd,font=\footnotesize\bfseries,anchor=west] at (42.7,10.6)  {GND rail};
-  \node[gnd,font=\footnotesize\bfseries,anchor=west] at (42.7,0.0)   {GND rail};
+  \draw[vcc]    (0.3,11.15) -- (44.5,11.15);
+  \draw[gnd!80] (0.3,10.6)  -- (44.5,10.6);
+  \draw[gnd!80] (0.3,0.0)   -- (44.5,0.0);
+  \node[vcc,font=\footnotesize\bfseries,anchor=west] at (44.8,11.15) {$+5\,$V rail};
+  \node[gnd,font=\footnotesize\bfseries,anchor=west] at (44.8,10.6)  {GND rail};
+  \node[gnd,font=\footnotesize\bfseries,anchor=west] at (44.8,0.0)   {GND rail};
 
   % ---------- transistors (legs E B C in adjacent holes) ----------
   \transd{5}{Q9}{2N3904}
@@ -226,14 +215,14 @@
   \draw[onet] ({0.7*34},9.0) -- ({0.7*34},5.2);
   \draw[onet] ({0.7*50},9.0) -- ({0.7*50},5.2);
   \draw[onet] ({0.7*54},9.0) -- ({0.7*54},5.2);
-  \draw[onet] ({0.7*23},5.2) -- (43.3,5.2);
+  \draw[onet] ({0.7*23},5.2) -- (45.4,5.2);
   \fill[onet] ({0.7*23},5.2) circle (1.5pt);
   \fill[onet] ({0.7*34},5.2) circle (1.5pt);
   \fill[onet] ({0.7*50},5.2) circle (1.5pt);
   \fill[onet] ({0.7*54},5.2) circle (1.5pt);
   \node[onet,font=\footnotesize,anchor=south] at ({0.7*56},5.25) {output};
-  \node[onet,anchor=west,font=\bfseries] at (43.4,5.2) {Output $Y=A\oplus B$};
-  \fill[onet] (43.3,5.2) circle (1.5pt);
+  \node[onet,anchor=west,font=\bfseries] at (45.5,5.2) {Output $Y=A\oplus B$};
+  \fill[onet] (45.4,5.2) circle (1.5pt);
   % output indicator LED on col 57
   \draw ({0.7*57},5.2) to[R, l_=\scriptsize $R_{out}$, *-] ({0.7*57},3.8);
   \draw ({0.7*57},3.8) to[leD, l_=\scriptsize LED$_{\mathrm{out}}$] ({0.7*57},2.6);
@@ -263,8 +252,8 @@
     \node[anchor=west,font=\footnotesize\itshape] at (-0.2,-0.1)
         {Each column of five holes in a bank is one node; transistor legs are E\,B\,C in \textbf{adjacent} holes.};
     \node[anchor=west,font=\footnotesize\itshape] at (-0.2,-0.65)
-        {Two half-size boards side by side: nothing sits on the seam; signals simply jump across it.
-         Bridge the rails at the seam and bridge \textbf{all GND rails into one node}.};
+        {One standard full-size (830-point) breadboard. The two GND rails are \textbf{one node} --
+         bridge them with a jumper at the board edge.};
   \end{scope}
 
 \end{tikzpicture}

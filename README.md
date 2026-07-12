@@ -5,9 +5,9 @@ An XOR gate outputs `1` **when its inputs are different**, and `0` when they are
 
 This version is a **native complementary (CMOS-style) gate** — the standard CMOS XOR topology
 built from 2N3904/2N3906 pairs, just like this project's NAND and NOR. The whole gate is
-**12 transistors on two half-size (400-point) breadboards** placed side by side, with
-indicator LEDs on the external inputs and output only. (It can also be wired from three
-finished gate boards — see the [alternative build](#alternative-build-from-finished-gate-boards).)
+**12 transistors on one standard full-size (830-point) breadboard**, with indicator LEDs on
+the external inputs and output only. (It can also be wired from three finished gate boards —
+see the [alternative build](#alternative-build-from-finished-gate-boards).)
 
 ### Symbol
 
@@ -80,18 +80,17 @@ Check it against the truth table:
 
 ## Building it on a breadboard
 
-The whole XOR gate — **12 transistors** — fits on **two half-size (400-point) breadboards
-placed side by side** (nothing sits on the seam; signals simply jump across it). All twelve
-share the same TO-92 pinout (flat face toward you, legs down, **E B C** left to right), and
-here the legs sit in **adjacent holes**:
+The whole XOR gate — **12 transistors** — fits on **one standard full-size (830-point)
+breadboard**. All twelve share the same TO-92 pinout (flat face toward you, legs down,
+**E B C** left to right), and here the legs sit in **adjacent holes**:
 
 <img src="images/pinout.png" width="360">
 
-The wiring picture below is the actual two-board build, every connection a **colour-coded
+The wiring picture below is the actual breadboard build, every connection a **colour-coded
 jumper** (see the legend). Each column of five holes in a bank is one node. The **top rail
 pair** carries `+5 V` (outer) and `GND` (inner) for the transistor emitters; the **bottom
-rail** is `GND` for the LED returns. Bridge the rails across the seam, and bridge **all GND
-rails into one node**.
+rail** is `GND` for the LED returns — the GND rails are **one node**, so bridge them with a
+jumper at the board edge.
 
 <img src="images/wiring.png" width="950">
 
@@ -171,7 +170,7 @@ AND 3+3 — each board with its own full LED set. The native build saves 4 trans
 
 ### Power
 
-- One **+5 V** rail and a common **GND** (0 V) reference across both boards.
+- One **+5 V** rail and a common **GND** (0 V) reference.
 
 ---
 
